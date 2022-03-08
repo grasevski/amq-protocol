@@ -18,7 +18,6 @@ const ENFORCED_DEFAULTS: &[ClassDefaults] = &[
             ("get", &["ticket"]),
             ("publish", &["ticket"]),
             ("get-empty", &["cluster-id"]),
-            ("qos", &["prefetch-size"]),
         ],
     ),
     (

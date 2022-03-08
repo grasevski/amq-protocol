@@ -516,6 +516,8 @@ pub mod basic {
     /// qos (Generated)
     #[derive(Clone, Debug, Default, PartialEq)]
     pub struct Qos {
+        /// prefetch-size (Generated)
+        pub prefetch_size: LongUInt,
         /// prefetch-count (Generated)
         pub prefetch_count: ShortUInt,
         /// global (Generated)
@@ -536,12 +538,13 @@ pub mod basic {
 
     /// Parse qos (Generated)
     pub fn parse_qos<I: ParsableInput>(i: I) -> ParserResult<I, Qos> {
-        let (i, _) = parse_long_uint(i)?;
+        let (i, prefetch_size) = parse_long_uint(i)?;
         let (i, prefetch_count) = parse_short_uint(i)?;
         let (i, flags) = parse_flags(i, &["global"])?;
         Ok((
             i,
             Qos {
+                prefetch_size,
                 prefetch_count,
                 global: flags.get_flag("global").unwrap_or(false),
             },
@@ -556,7 +559,7 @@ pub mod basic {
             let mut flags = AMQPFlags::default();
             flags.add_flag("global".to_string(), method.global);
             input = gen_id(10)(input)?;
-            input = gen_long_uint(0)(input)?;
+            input = gen_long_uint(method.prefetch_size)(input)?;
             input = gen_short_uint(method.prefetch_count)(input)?;
             input = gen_flags(&flags)(input)?;
             Ok(input)
